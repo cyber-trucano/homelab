@@ -1,5 +1,3 @@
-# homelab
-
 # 🏠 Homelab Infrastructure
 
 This repository documents my self-hosted homelab environment, built from scratch using virtualization, Docker, and Linux. It serves as both a learning platform and a foundation for the SOC analyst skills documented in my [soc-analyst-labs](https://github.com/cyber-trucano/soc-analyst-labs) repo.
@@ -24,9 +22,9 @@ This repository documents my self-hosted homelab environment, built from scratch
 | Service | Purpose | Status |
 |---|---|---|
 | [Portainer CE](https://www.portainer.io/) | Docker container management UI | ✅ Running |
-| [Pi-hole](https://pi-hole.net/) | Network-wide DNS ad blocking | 🔜 Planned |
-| [Jellyfin](https://jellyfin.org/) | Self-hosted media server | 🔜 Planned |
+| [Pi-hole](https://pi-hole.net/) | Network-wide DNS ad blocking | ✅ Running |
 | [Nginx Proxy Manager](https://nginxproxymanager.com/) | Reverse proxy with SSL | 🔜 Planned |
+| [Jellyfin](https://jellyfin.org/) | Self-hosted media server | 🔜 Planned |
 | [Minecraft Server](https://docker-minecraft-server.readthedocs.io/) | Self-hosted game server (Paper) | 🔜 Planned |
 | [Authentik](https://goauthentik.io/) | Self-hosted SSO / user management | 🔜 Planned |
 | [Wazuh](https://wazuh.com/) | SIEM — log collection and threat detection | 🔜 Planned |
@@ -48,7 +46,16 @@ sudo apt install docker.io docker-compose -y
 sudo usermod -aG docker $USER
 ```
 
-### 3. Portainer Deployment
+### 3. Fix systemd-resolved (required before Pi-hole)
+Ubuntu reserves port 53 by default. Disable it before deploying any DNS service:
+```bash
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+sudo rm /etc/resolv.conf
+echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+```
+
+### 4. Portainer Deployment
 ```bash
 docker volume create portainer_data
 
@@ -62,6 +69,12 @@ docker run -d \
   portainer/portainer-ce:latest
 ```
 Access via `https://<server-ip>:9443`
+
+### 5. Pi-hole Deployment
+Deployed via Portainer Stacks using host networking to avoid DNS conflicts.
+See [services/pihole/docker-compose.yml](services/pihole/docker-compose.yml)
+
+Access via `http://<server-ip>/admin`
 
 ---
 
@@ -96,9 +109,9 @@ This homelab directly supports my SOC analyst lab work. Wazuh (SIEM) will monito
 - [x] Configure SSH remote access
 - [x] Install Docker
 - [x] Deploy Portainer
-- [ ] Deploy Pi-hole
-- [ ] Deploy Jellyfin
+- [x] Deploy Pi-hole
 - [ ] Deploy Nginx Proxy Manager
+- [ ] Deploy Jellyfin
 - [ ] Deploy Minecraft Server
 - [ ] Deploy Authentik (SSO)
 - [ ] Deploy Wazuh SIEM
