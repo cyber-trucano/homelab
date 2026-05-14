@@ -1,21 +1,25 @@
 services:
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    ports:
-      - "8000:8000"
-      - "9443:9443"
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    network_mode: host
+    environment:
+      TZ: 'America/Chicago'
+      WEBPASSWORD: 'changeme'        # Change this!
+      PIHOLE_DNS_: '8.8.8.8;8.8.4.4'
+      DNSMASQ_LISTENING: 'all'
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    restart: always
-
-volumes:
-  portainer_data:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    restart: unless-stopped
 
 # Notes:
-# - Access UI at https://<server-ip>:9443
-# - Accept the SSL warning on first visit — this is expected (self-signed cert)
-# - Create admin account on first launch
-# - Port 8000 is for edge agent communication (optional but included)
-# - /var/run/docker.sock gives Portainer control over the Docker daemon
+# - network_mode: host is required to avoid port 53 conflicts with Docker NAT
+# - Disable systemd-resolved on Ubuntu before deploying:
+#     sudo systemctl stop systemd-resolved
+#     sudo systemctl disable systemd-resolved
+#     sudo rm /etc/resolv.conf
+#     echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+# - Change password after deploy:
+#     docker exec -it pihole pihole setpassword
+# - Access admin UI at http://<server-ip>/admin
