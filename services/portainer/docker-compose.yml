@@ -1,0 +1,21 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+
+volumes:
+  portainer_data:
+
+# Notes:
+# - Access UI at https://<server-ip>:9443
+# - Accept the SSL warning on first visit — this is expected (self-signed cert)
+# - Create admin account on first launch
+# - Port 8000 is for edge agent communication (optional but included)
+# - /var/run/docker.sock gives Portainer control over the Docker daemon
