@@ -1,10 +1,10 @@
-# 🏠 Homelab Infrastructure
+# Homelab Infrastructure
 
 This repository documents my self-hosted homelab environment, built from scratch using virtualization, Docker, and Linux. It serves as both a learning platform and a foundation for the SOC analyst skills documented in my [soc-analyst-labs](https://github.com/cyber-trucano/soc-analyst-labs) repo.
 
 ---
 
-## 🖥️ Infrastructure Overview
+## Infrastructure Overview
 
 | Component | Details |
 |---|---|
@@ -17,7 +17,7 @@ This repository documents my self-hosted homelab environment, built from scratch
 
 ---
 
-## 🐳 Deployed Services
+## Deployed Services
 
 | Service | Purpose | Status |
 |---|---|---|
@@ -31,7 +31,7 @@ This repository documents my self-hosted homelab environment, built from scratch
 
 ---
 
-## 🚀 Setup Process
+## Setup Process
 
 ### 1. Base System
 - Installed Ubuntu 26.04 LTS Server via VMware ISO
@@ -78,7 +78,7 @@ Access via `http://<server-ip>/admin`
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 ```
 homelab/
